@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS user_roles;
+
+CREATE TABLE user (
+	u_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username TEXT UNIQUE NOT NULL,
+	password TEXT NOT NULL,
+	user_role INTEGER NOT NULL,
+	FOREIGN KEY (user_role) REFERENCES user_roles (ur_id)
+);
+
+
+CREATE TABLE user_roles (
+	ur_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	u_role TEXT  NOT NULL,
+	u_privilege INTEGER NOT NULL
+);
