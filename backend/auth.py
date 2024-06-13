@@ -7,9 +7,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.db import get_db
 
-bp = Blueprint('auth',__name__,url_prefix='/auth')
+auth_v1 = Blueprint('auth_v1',__name__,url_prefix='/auth')
 
-@bp.route('/register', methods=('GET','POST'))
+@auth_v1.route('/register', methods=('GET','POST'))
 def register():
 	if request.method=='POST':
 		# section to change as to make it an API
@@ -45,7 +45,7 @@ def register():
 			}
 	return response
 
-@bp.route('/login',methods=('GET','POST'))
+@auth_v1.route('/login',methods=('GET','POST'))
 def login():
 	if request.method == 'POST':
 		# to change for api
@@ -72,7 +72,7 @@ def login():
 			}
 	return response
 
-@bp.route('/validate',methods=('GET','POST'))
+@auth_v1.route('/validate',methods=('GET','POST'))
 def validation():
 	if request.method == 'POST':
 		# to change for api
@@ -88,7 +88,7 @@ def validation():
 		}
 	return response
 	
-@bp.route('/logout',methods=('GET','POST'))
+@auth_v1.route('/logout',methods=('GET','POST'))
 def logout():
 	authkey = None
 	return {'status':200,'message':'reset authkey'}

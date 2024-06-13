@@ -4,6 +4,30 @@ import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 
+import bson
+
+from flask import current_app, g
+from werkzeug.local import LocalProxy
+from flask_pymongo import PyMongo
+
+from pymongo.errors import DuplicateKeyError, OperationFailure
+from bson.objectid import ObjectId
+from bson.errors import InvalidId
+
+
+def get_db_mongo():
+    """
+    Configuration method to return db instance
+    """
+    db = getattr(g, "_database", None)
+
+    if db is None:
+
+        db = g._database = PyMongo(current_app).db
+       
+    return db
+
+
 def get_db():
 	if 'db' not in g:
 		g.db = sqlite3.connect(
@@ -38,3 +62,7 @@ def init_db_command():
 def init_app(app):
 	app.teardown_appcontext(close_db)
 	app.cli.add_command(init_db_command)
+
+# Use LocalProxy to read the global db instance with just `db`
+db = LocalProxy(get_db_mongo)
+

@@ -1,0 +1,8 @@
+app==0.0.1
+click==8.1.7
+Flask==3.0.3
+flask_cors==4.0.1
+flask_pymongo==2.3.0
+pymongo==4.7.3
+python-dotenv==1.0.1
+Werkzeug==3.0.3
