@@ -4,7 +4,8 @@ from dotenv import dotenv_values
 from pymongo import MongoClient
 from flask_cors import CORS
 from auth import auth_v1
-from app.db import get_db_mongo
+from db import get_db_mongo
+from bson.json_util import dumps, loads 
 
 config = dotenv_values(".env")
 
@@ -15,7 +16,9 @@ DB_NAME='startup'
 app =  Flask(__name__)
 CORS(app)
 #db = g._database = PyMongo(current_app).db
-db = get_db_mongo()
+db=None
+with app.app_context():
+    db = get_db_mongo(ATLAS_URI,DB_NAME)
 
 # def startup_db_client():
 #     app.mongodb_client = MongoClient(config["ATLAS_URI"])
@@ -43,16 +46,28 @@ def comments_handler():
     if request.method=='POST':
         name,email = request.json['name'],request.json['email']
         website, comment = request.json['website'],request.json['comment']
-        comments_doc = { 'name' : name, 'email' : email , 'website' : website,'comment' : comment}
+        blog_id = request.json['blog_id']
+        comments_doc = { 'name' : name, 'email' : email , 'website' : website,'comment' : comment,'blog_id':blog_id}
         try:
             db.comments.insert_one(comment_doc)
             return {'status':200,'msg':'Your comment request is successfully processed!'}
         except:
             return {'status':500,'msg':'Error while processing DB!'}
     elif request.method=='GET':
-        return msgs.comments
+        try:
+            return {'comments':dumps(list(db.comments.find(limit=10)))}
+        except:
+            return {'status':404,'msg': 'Unexpected error while fetching comments'}
     else:
         return {'status':500,'msg':'Unknown type'}
+
+@app.route('/comments/<int:blog_id>',methods=['GET'])
+def comments_handler_blogs(blog_id):
+    try:
+        return {'comments': dumps(list(db.comments.find({'blog_id':blog_id})))}
+    except:
+        return {'status':'Unexpected error fetching comments for blog_id.'}
+        
 
 @app.route('/subscription')
 def subscription_handler():

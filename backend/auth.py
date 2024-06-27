@@ -5,7 +5,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app.db import get_db
+from db import get_db
 
 auth_v1 = Blueprint('auth_v1',__name__,url_prefix='/auth')
 
@@ -16,6 +16,11 @@ def register():
 		username = request.json['username']
 		password = request.json['password']
 		user_role = 1
+		# if it did'nt work just add the context to the db
+		# it would be something like this
+		#
+		# with app.app_context():
+		#     db = get_db()
 		db = get_db()
 		error = None
 

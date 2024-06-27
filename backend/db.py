@@ -16,24 +16,20 @@ from bson.errors import InvalidId
 
 
 def get_db_mongo(ATLAS_URI='', DB_NAME=''):
-    """
-    Configuration method to return db instance
-    """
+	"""
+	Configuration method to return db instance
+	"""
 	if 'db' in g:
-    	db = getattr(g, "_database", None)
-    	if db is None:
-        	db = g._database = PyMongo(current_app).db
-    	return db
-	elif ATLAS_URI='' or DB_NAME = '':
+		db = getattr(g, "_database", None)
+		if db is None:
+			db = g._database = PyMongo(current_app).db
+		return db
+	elif ATLAS_URI=='' or DB_NAME == '':
 		raise OperationFailure('Connection Failure, please use ATLAS_URI and DB_NAME properly')
 	else:
 		client = MongoClient(ATLAS_URI)
 		db = client[DB_NAME]
 		return db
-
-
-
-def get_db_mongo():
 
 
 
