@@ -8,7 +8,7 @@ from app.db import get_db_mongo
 
 config = dotenv_values(".env")
 
-PASSWORD=''
+PASSWORD='CpWfPvUiBme6TZSd'
 ATLAS_URI=f'mongodb+srv://zyuvrajsinh09:{PASSWORD}@startup.m8iole4.mongodb.net/?retryWrites=true&w=majority'
 DB_NAME='startup'
 
