@@ -13,6 +13,7 @@ PASSWORD='CpWfPvUiBme6TZSd'
 ATLAS_URI=f'mongodb+srv://zyuvrajsinh09:{PASSWORD}@startup.m8iole4.mongodb.net/?retryWrites=true&w=majority'
 DB_NAME='startup'
 
+# instead of ATLAS_URI, DB_NAME, use config['ATLAS_URI'] config['DB_NAME']
 app =  Flask(__name__)
 CORS(app)
 #db = g._database = PyMongo(current_app).db
@@ -28,6 +29,10 @@ with app.app_context():
 
 # def shutdown_db_client():
 #     app.mongodb_client.close()
+
+@app.route('/',method=['GET'])
+def index():
+    return {'status':200, 'API_CONTRACTS':['/login','/logout','/register','/contact-us','/comments','/comments/<blog_id>','/subscription']}
 
 @app.route('/contact-us',methods=['POST'])
 def contact_us():
